@@ -2,16 +2,15 @@ import os
 from fastapi import FastAPI, HTTPException , UploadFile, File, Form
 import numpy as np
 from pydantic import BaseModel
-from langchain import hub
+# from langchain import hub
 from langchain_openai import ChatOpenAI
-from langchain_chroma import Chroma
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+# from langchain_chroma import Chroma
+# from langchain_core.output_parsers import StrOutputParser
+# from langchain_core.runnables import RunnablePassthrough
 from sentence_transformers import SentenceTransformer
 from functools import lru_cache
 # from langchain_community.embeddings import OpenAIEmbeddings
 from dotenv import load_dotenv
-import chromadb
 import PyPDF2
 # from langchain.prompts import PromptTemplate
 # from langchain_cohere.llms import Cohere
@@ -33,7 +32,6 @@ genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 
 # Initialize Chroma Cloud client
-chroma_client = chromadb.Client()
 
 
 # RAG class definition
@@ -42,19 +40,19 @@ class RAG:
         # Initialize the language model
         self.llm = ChatOpenAI(model=model, api_key="OPENAI_APIKEY")
         # Load the vector store for the specific website (namespace)
-        self.vectorstore = chroma_client.get_or_create_collection(name=namespace)
+        # self.vectorstore = chroma_client.get_or_create_collection(name=namespace)
         
 
-        self.retriever = self.vectorstore.as_retriever()
-        self.prompt = hub.pull("rlm/rag-prompt")
+        # self.retriever = self.vectorstore.as_retriever()
+        # self.prompt = hub.pull("rlm/rag-prompt")
 
-        # RAG chain definition
-        self.rag_chain = (
-            {"context": self.retriever | self.format_docs, "question": RunnablePassthrough()}
-            | self.prompt
-            | self.llm
-            | StrOutputParser()
-        )
+        # # RAG chain definition
+        # self.rag_chain = (
+        #     {"context": self.retriever | self.format_docs, "question": RunnablePassthrough()}
+        #     | self.prompt
+        #     | self.llm
+        #     | StrOutputParser()
+        # )
 
     def format_docs(self, docs):
         return "\n\n".join(doc.page_content for doc in docs)
@@ -144,19 +142,19 @@ async def ask_question(domain: str, query: QueryRequest):
         embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
         custom_embeddings = CustomEmbeddingFunction(embeddings_model)
         
-        db3 = Chroma(persist_directory=f"./data/{namespace}" , embedding_function=custom_embeddings)
+        # db3 = Chroma(persist_directory=f"./data/{namespace}" , embedding_function=custom_embeddings)
         
-        context = db3.similarity_search(query.question)
+        # context = db3.similarity_search(query.question)
         
-        if not context:
-            return {"question": query.question, "answer": "No relevant information found."}
+        # if not context:
+        #     return {"question": query.question, "answer": "No relevant information found."}
         
 
 
         # Use OpenAI or another model to generate a structured answer based on the context
-        answer = generate_response(context, query.question , api_key)
+        # answer = generate_response(context, query.question , api_key)
         
-        return {"question": query.question, "answer": answer}
+        # return {"question": query.question, "answer": answer}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -166,69 +164,69 @@ def health_check():
     return {"health": "ok"}  
 
 
-@app.post('/createEmbeddings')
-async def create_embeddings(namespace: str = Form(...), file: UploadFile = File(...)):
-    pdf_reader = PyPDF2.PdfReader(file.file)
-    print(os.environ.get("PINECONE_API_KEY"))
-    pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
-    # print(os.getenv("OPENAI_API_KEY"))
-    for key, value in os.environ.items():
-        print(f"{key}: {value}")
-    file_text = ""
-    for page in pdf_reader.pages:
-        file_text += page.extract_text()
+# @app.post('/createEmbeddings')
+# async def create_embeddings(namespace: str = Form(...), file: UploadFile = File(...)):
+#     pdf_reader = PyPDF2.PdfReader(file.file)
+#     print(os.environ.get("PINECONE_API_KEY"))
+#     pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
+#     # print(os.getenv("OPENAI_API_KEY"))
+#     for key, value in os.environ.items():
+#         print(f"{key}: {value}")
+#     file_text = ""
+#     for page in pdf_reader.pages:
+#         file_text += page.extract_text()
 
-    # Create embeddings using OpenAI
-    print("Text Data-----------------" , file_text)
-    try:
+#     # Create embeddings using OpenAI
+#     print("Text Data-----------------" , file_text)
+#     try:
         
-        # embeddings_model = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
-        # embeddings = embeddings_model.embed_documents([file_text])
+#         # embeddings_model = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
+#         # embeddings = embeddings_model.embed_documents([file_text])
         
         
-        embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
-        print("embed",embeddings_model)
-        # custom_embeddings = CustomEmbeddingFunction(embeddings_model)
+#         embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
+#         print("embed",embeddings_model)
+#         # custom_embeddings = CustomEmbeddingFunction(embeddings_model)
         
-        # persist_directory =  f'./data/{namespace}'
+#         # persist_directory =  f'./data/{namespace}'
         
-        # vector_store = Chroma(persist_directory=persist_directory, embedding_function=custom_embeddings)
+#         # vector_store = Chroma(persist_directory=persist_directory, embedding_function=custom_embeddings)
 
-        # # Add the document to the vector store
-        # vector_store.add_texts(texts=[file_text], ids=[namespace])
+#         # # Add the document to the vector store
+#         # vector_store.add_texts(texts=[file_text], ids=[namespace])
         
-        # print("Created embeddings at /data/", namespace)
-        # return {"message": "Embeddings created and stored successfully "}
+#         # print("Created embeddings at /data/", namespace)
+#         # return {"message": "Embeddings created and stored successfully "}
         
-        chunk_size = 500  # Adjust as needed for optimal input
-        chunks = [file_text[i:i + chunk_size] for i in range(0, len(file_text), chunk_size)]
+#         chunk_size = 500  # Adjust as needed for optimal input
+#         chunks = [file_text[i:i + chunk_size] for i in range(0, len(file_text), chunk_size)]
 
-        # Generate embeddings for each chunk
-        chunk_embeddings = [embeddings_model.encode(chunk) for chunk in chunks]
+#         # Generate embeddings for each chunk
+#         chunk_embeddings = [embeddings_model.encode(chunk) for chunk in chunks]
     
-        index_name = namespace
-        embedding_dimension = 384  # Fixed size for 'all-MiniLM-L6-v2'
+#         index_name = namespace
+#         embedding_dimension = 384  # Fixed size for 'all-MiniLM-L6-v2'
 
-        if index_name not in pc.list_indexes():
-            pc.create_index(name=index_name, dimension=embedding_dimension , metric='euclidean',
-            spec=ServerlessSpec(
-                cloud='aws', 
-                region='us-east-1'
-            ))
-        index = pc.Index(index_name)
-        # Add chunks to Pinecone index with metadata
-        vectors = [
-            (f"{namespace}_chunk_{i}", embedding, {"text": chunk_text})  # Include metadata as a dictionary
-            for i, (embedding, chunk_text) in enumerate(zip(chunk_embeddings, chunks))
-        ]
+#         if index_name not in pc.list_indexes():
+#             pc.create_index(name=index_name, dimension=embedding_dimension , metric='euclidean',
+#             spec=ServerlessSpec(
+#                 cloud='aws', 
+#                 region='us-east-1'
+#             ))
+#         index = pc.Index(index_name)
+#         # Add chunks to Pinecone index with metadata
+#         vectors = [
+#             (f"{namespace}_chunk_{i}", embedding, {"text": chunk_text})  # Include metadata as a dictionary
+#             for i, (embedding, chunk_text) in enumerate(zip(chunk_embeddings, chunks))
+#         ]
 
-        # Perform the upsert operation to insert vectors along with their metadata
-        index.upsert(vectors)
+#         # Perform the upsert operation to insert vectors along with their metadata
+#         index.upsert(vectors)
 
-        print(f"Created embeddings in Pinecone under index: {namespace}")
+#         print(f"Created embeddings in Pinecone under index: {namespace}")
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
     
     
 

@@ -1,8 +1,11 @@
 fastapi
+uvicorn
+numpy
 pydantic
-openai
-langchain
-langchain_openai
-langchain_chroma
-chromadb
-functions
+langchain==0.3.3
+langchain-openai==0.2.2
+sentence-transformers
+pypdf2
+google-generativeai
+python-dotenv
+pinecone==5.4.1
