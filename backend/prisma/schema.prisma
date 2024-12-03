@@ -7,12 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model users {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
-  mobile    Int
+  mobile    String
   password  String
-  namespace String?  // Make this field optional
-  domain    String?  // Make this field optional
+}
+
+model WebModel {
+  namespace String 
+  URL String @unique @id
+  firstName String
+  lastName String
+  mobile String
+  city String
+  postalCode String
+  streetAddress String
+  country String
+  region String
+  about String  
 }

@@ -24,7 +24,7 @@ export const queryHandler =  async(req: Request, res: Response): Promise<void> =
         };
 
         // Send request to AI Engine's /query endpoint
-        const response = await axios.post('http://localhost:8000/query', data);
+        const response = await axios.post( `${process.env.AI_ENGINE_SERVER}/test_qeury` || 'http://localhost:8000/test_query', data);
 
         // Return the response from the AI Engine to the client
         res.status(response.status).json(response.data);
