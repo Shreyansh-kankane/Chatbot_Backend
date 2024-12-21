@@ -17,8 +17,14 @@ app.use('/auth' , authRouter);
 app.use('/data' , dataRouter);
 
 
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Database connected'))
+  .catch((err) => console.error('Database connection error:', err));
+
+
 // Basic route
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req, res) => {
   res.send('Hello, TypeScript with Express!');
 });
 

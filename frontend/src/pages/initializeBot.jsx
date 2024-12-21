@@ -14,10 +14,11 @@ export default function InitializeBot() {
         // Collect form data
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries()); // Convert to a plain object
+        console.log(data);
     
         try {
           // Make the POST request
-          const response = await axios.post(`${process.env.BACKEND_URI}/data/initializebot`, data)
+          const response = await axios.post(`http://localhost:3001/data/initializebot`, data)
           console.log('Bot initialized successfully:', response.data);
           sessionStorage.setItem('webModel', JSON.stringify(response.data.data));
           toast.success("chatbot initialised");
@@ -44,14 +45,14 @@ export default function InitializeBot() {
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                 <div className="sm:col-span-4">
-                  <label htmlFor="domain" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="URL" className="block text-sm/6 font-medium text-gray-900">
                     Domain URL
                   </label>
                   <div className="mt-2">
                     <div className="flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                       <input
-                        id="domain"
-                        name="domain"
+                        id="URL"
+                        name="URL"
                         type="text"
                         placeholder="example.com"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
@@ -106,13 +107,13 @@ export default function InitializeBot() {
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-3">
-                  <label htmlFor="first-name" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="firstName" className="block text-sm/6 font-medium text-gray-900">
                     First name
                   </label>
                   <div className="mt-2">
                     <input
-                      id="first-name"
-                      name="first-name"
+                      id="firstName"
+                      name="firstName"
                       type="text"
                       autoComplete="given-name"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -121,13 +122,13 @@ export default function InitializeBot() {
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label htmlFor="last-name" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="lastName" className="block text-sm/6 font-medium text-gray-900">
                     Last name
                   </label>
                   <div className="mt-2">
                     <input
-                      id="last-name"
-                      name="last-name"
+                      id="lastName"
+                      name="lastName"
                       type="text"
                       autoComplete="family-name"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -190,15 +191,15 @@ export default function InitializeBot() {
                 </div>
 
                 <div className="col-span-full">
-                  <label htmlFor="street-address" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="streetAddress" className="block text-sm/6 font-medium text-gray-900">
                     Street address
                   </label>
                   <div className="mt-2">
                     <input
-                      id="street-address"
-                      name="street-address"
+                      id="streetAddress"
+                      name="streetAddress"
                       type="text"
-                      autoComplete="street-address"
+                      autoComplete="streetAddress"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                   </div>
@@ -235,15 +236,15 @@ export default function InitializeBot() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label htmlFor="postal-code" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="postalCode" className="block text-sm/6 font-medium text-gray-900">
                     ZIP / Postal code
                   </label>
                   <div className="mt-2">
                     <input
-                      id="postal-code"
-                      name="postal-code"
+                      id="postalCode"
+                      name="postalCode"
                       type="text"
-                      autoComplete="postal-code"
+                      autoComplete="postalCode"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                   </div>

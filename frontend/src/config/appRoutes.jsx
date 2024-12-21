@@ -1,7 +1,5 @@
-
-
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LandingPage from '../pages/landingPage';
 import InitializeBot from '../pages/initializeBot';
 import Dashboard from '../pages/dashboard'; 
@@ -9,14 +7,23 @@ import Login from '../pages/login';
 import Register from '../pages/register';
 
 function AppRoutes() {
-  
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem('authToken') // Example of checking login status
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('authToken')); // Initial check for login status
+
+  // Update `isLoggedIn` whenever `authToken` changes in sessionStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!sessionStorage.getItem('authToken'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <Routes>
-
       <Route path='/' element={<LandingPage />} />
     
       <Route

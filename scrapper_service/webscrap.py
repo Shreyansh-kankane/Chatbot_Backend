@@ -4,10 +4,12 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from queue import Queue
 from datetime import datetime
-from createEmbeddings import create_embeddings
+from createEmbeddings import create_embeddings2
+from fastapi import UploadFile
+from io import BytesIO
 
 # Function to scrape website
-async def scrape_website(base_url, output_folder="./data", max_pages=1500, max_depth=7):
+async def scrape_website(base_url, namespace, output_folder="./data", max_pages=50, max_depth=1):
     visited = set()  # Track visited URLs
     q = Queue()
     q.put((base_url, 0))  # Queue holds tuples of (URL, depth)
@@ -68,17 +70,19 @@ async def scrape_website(base_url, output_folder="./data", max_pages=1500, max_d
     print(f"Scraping completed. Data saved to: {output_path} \n")
 
     # Trigger the embedding creation process after scraping is finished
-    await create_embeddings_from_scraped_data(all_scraped_texts)
+    await create_embeddings_from_scraped_data(output_path,namespace)
 
 # Function to create embeddings after scraping is done
-async def create_embeddings_from_scraped_data(scraped_texts):
+async def create_embeddings_from_scraped_data(output_path,namespace):
     try:
+        # Prepare the file as an UploadFile instance
+        with open(output_path, 'rb') as file_content:
+            file = UploadFile(filename=output_path, file=BytesIO(file_content.read()))
+
         # Generate embeddings for each chunk of scraped text
-        namespace = "pecdata2"
-        await create_embeddings(text=scraped_texts, namespace=namespace)
+        await create_embeddings2(namespace=namespace, file=file)
 
-        print("Embeddings created ans stored in Pinecone successfully.")
-
+        print("Embeddings created and stored in Pinecone successfully.")
     except Exception as e:
         print(f"Error during embedding creation: {str(e)}")
         raise

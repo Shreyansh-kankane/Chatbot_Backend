@@ -12,9 +12,9 @@ def read_root():
 
 # Define the route to scrape in the background
 @app.get("/scrape")
-async def scrap_router(base_url: str, background_tasks: BackgroundTasks):
+async def scrap_router(base_url: str, namespace:str, background_tasks: BackgroundTasks):
     # Add the scrape task to the background
-    background_tasks.add_task(webscrap.scrape_website, base_url)
+    background_tasks.add_task(webscrap.scrape_website, base_url,namespace)
     return {"message": f"Scraping for {base_url} has started in the background."}
 
 @app.post('/createEmbeddings')

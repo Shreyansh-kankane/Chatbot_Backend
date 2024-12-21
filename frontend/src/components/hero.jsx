@@ -20,7 +20,7 @@ const Hero = () => {
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
           We're Aspiring Web & AI developers creating scalable & <br className='sm:block hidden' />
-          customizable chatbot templates for website with some Cool technologies and innovation... 
+          customizable AI Chatbot templates for website with some Cool technologies and innovation.
           </p>
         </div>
 

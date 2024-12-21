@@ -14,10 +14,10 @@ function Login() {
   };
 
   const handleLogin = async (e) => {
-    const backendUri = process.env.BACKEND_URI;
+
     e.preventDefault();
     try {
-      const response = await fetch(`${backendUri}/auth/login`, {
+      const response = await fetch(`http://localhost:3001/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
